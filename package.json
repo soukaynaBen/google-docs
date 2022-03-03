@@ -1,0 +1,30 @@
+{
+  "name": "google-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@material-tailwind/react": "0.3.4",
+    "@next-auth/firebase-adapter": "^0.1.2-pr.183-76202b42.8",
+    "draft-js": "^0.11.7",
+    "firebase": "^9.6.7",
+    "next": "12.1.0",
+    "next-auth": "^4.2.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-draft-wysiwyg": "^1.14.7",
+    "react-firebase-hooks": "^5.0.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.2",
+    "eslint": "8.9.0",
+    "eslint-config-next": "12.1.0",
+    "postcss": "^8.4.7",
+    "tailwindcss": "^3.0.23"
+  }
+}
