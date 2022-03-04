@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import {convertFromRaw,convertToRaw} from 'draft-js'
 import { useSession } from 'next-auth/react';
 import { db } from '../firebase';
-import Spinner from './Spinner';
+import AppSpinner from './AppSpinner';
 
 const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
         {
@@ -61,7 +61,7 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     }, [])
     
   return (<> 
-   {loading ?  <Spinner/> : ( 
+   {loading ?  <AppSpinner/> : ( 
     <div className='bg-[#F8F9FA] min-h-screen pb-16 '>
         <Editor
           toolbarClassName="flex sticky  top-0 z-50 !justify-center   mx-auto"
