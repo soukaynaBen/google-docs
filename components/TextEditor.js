@@ -1,4 +1,4 @@
-import React, { useEffect, useState,memo, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from 'draft-js';
@@ -21,13 +21,13 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     const {id}=router.query;
     const [editorState,setEditorState]=useState(EditorState.createEmpty());
 
-   const docCol= doc(db ,"Users", session.user.email,'documents',id)
-        const getDocument =useCallback(
-          async()=>{
+    const getDocument =useCallback(
+        async()=>{
+      const docCol= doc(db ,"Users", session.user.email,'documents',id)
        const docSnap=await getDoc(docCol);
        return docSnap.data();
       },
-          [docCol],
+          [session],
         )
          
      
@@ -36,7 +36,7 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     const onEditorStateChange= async (editorState)=>{
 
         setEditorState(editorState);
-
+        const docCol= doc(db ,"Users", session.user.email,'documents',id)
         await setDoc(docCol ,
                     { 
                         editorState: convertToRaw(editorState.getCurrentContent()) 
@@ -70,4 +70,4 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     </div>
   )
 }
-export default memo(TextEditor);
+export default TextEditor;    
