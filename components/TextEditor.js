@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from 'draft-js';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import {convertFromRaw,convertToRaw} from 'draft-js'
 import { useSession } from 'next-auth/react';
 import { db } from '../firebase';
+import Spinner from './Spinner';
 
 const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
         {
@@ -20,15 +21,15 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     const router=useRouter();
     const {id}=router.query;
     const [editorState,setEditorState]=useState(EditorState.createEmpty());
+    const [loading,setLoading]=useState(true)
+    const docCol= doc(db ,"Users", session.user.email,'documents',id)
 
-    const getDocument =useCallback(
-        async()=>{
-      const docCol= doc(db ,"Users", session.user.email,'documents',id)
+    
+    const getDocument = async()=>{
        const docSnap=await getDoc(docCol);
        return docSnap.data();
-      },
-          [session],
-        )
+      }
+         
          
      
   
@@ -36,7 +37,6 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
     const onEditorStateChange= async (editorState)=>{
 
         setEditorState(editorState);
-        const docCol= doc(db ,"Users", session.user.email,'documents',id)
         await setDoc(docCol ,
                     { 
                         editorState: convertToRaw(editorState.getCurrentContent()) 
@@ -52,14 +52,16 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
         getDocument().then((snapshot)=>{
             if(snapshot?.editorState){
                 setEditorState( EditorState.createWithContent(convertFromRaw(snapshot?.editorState)))
+                setLoading(false)
                 
             }
             
         })
     
-    }, [getDocument])
+    }, [])
     
-  return (
+  return (<> 
+   {loading ?  <Spinner/> : ( 
     <div className='bg-[#F8F9FA] min-h-screen pb-16 '>
         <Editor
           toolbarClassName="flex sticky  top-0 z-50 !justify-center   mx-auto"
@@ -67,7 +69,7 @@ const Editor=dynamic(()=> import('react-draft-wysiwyg').then((mod)=>mod.Editor),
           editorState={editorState}
           onEditorStateChange={onEditorStateChange}
         />
-    </div>
-  )
+    </div>)} 
+  </>)
 }
 export default TextEditor;    

@@ -45,7 +45,7 @@ export  default  function Document() {
       if(status=="unauthenticated") return <Login/>;
   return (   <div>
 
-          <header className='flex  items-center p-3 pb-1'>
+          <header className='flex  items-center p-3  shadow-md'>
               <Tooltip text='Home page' placement="right">
 
               <span className='cursor-pointer' onClick={()=> router.push('/')}>
